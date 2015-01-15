@@ -1,28 +1,22 @@
 # JssorsliderRails
 
-TODO: Write a gem description
+A ruby gem to add the Jssor Slider to your Rails asset pipeline.
 
-## Installation
+## Usage
 
 Add this line to your application's Gemfile:
 
     gem 'jssorslider-rails'
 
-And then execute:
+Require the Jssor files you want in application.js
 
-    $ bundle
+    //= require jssor.slider.mini
 
-Or install it yourself as:
-
-    $ gem install jssorslider-rails
-
-## Usage
-
-TODO: Write usage instructions here
+See http://www.jssor.com/development for how to setup the slider itself.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/jssorslider-rails/fork )
+1. Fork it ( https://github.com/spekode/jssorslider-rails/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
