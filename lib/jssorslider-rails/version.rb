@@ -1,3 +1,3 @@
 module JssorsliderRails
-  VERSION = "18.0"
+  VERSION = "19.0"
 end
