@@ -1,5 +1,5 @@
 ﻿/*
-* Jssor 18.0
+* Jssor 19.0
 * http://www.jssor.com/
 *
 * Licensed under the MIT license:
@@ -102,6 +102,14 @@ var $JssorDebug$ = new function () {
         }
     };
 
+    this.$C_AbstractProperty = function () {
+        ///	<summary>
+        ///		Tells compiler the property is abstract, it should be implemented by subclass.
+        ///	</summary>
+
+        throw new Error("The property is abstract, it should be implemented by subclass.");
+    };
+
     this.$C_AbstractMethod = function () {
         ///	<summary>
         ///		Tells compiler the method is abstract, it should be implemented by subclass.
@@ -110,12 +118,12 @@ var $JssorDebug$ = new function () {
         throw new Error("The method is abstract, it should be implemented by subclass.");
     };
 
-    function C_AbstractClass (instance) {
+    function C_AbstractClass(instance) {
         ///	<summary>
         ///		Tells compiler the class is abstract, it should be implemented by subclass.
         ///	</summary>
 
-        if(instance.constructor === C_AbstractClass.caller)
+        if (instance.constructor === C_AbstractClass.caller)
             throw new Error("Cannot create instance of an abstract class.");
     }
 
@@ -124,14 +132,11 @@ var $JssorDebug$ = new function () {
 
 //$JssorEasing$
 var $JssorEasing$ = window.$JssorEasing$ = {
-    $EaseLinear: function (t) {
-        return t;
-    },
-    $EaseGoBack: function (t) {
-        return 1 - Math.abs((t *= 2) - 1);
-    },
     $EaseSwing: function (t) {
         return -Math.cos(t * Math.PI) / 2 + .5;
+    },
+    $EaseLinear: function (t) {
+        return t;
     },
     $EaseInQuad: function (t) {
         return t * t;
@@ -235,6 +240,9 @@ var $JssorEasing$ = window.$JssorEasing$ = {
     $EaseInOutBounce: function (t) {
         return t < 1 / 2 ? $JssorEasing$.$EaseInBounce(t * 2) * .5 : $JssorEasing$.$EaseOutBounce(t * 2 - 1) * .5 + .5;
     },
+    $EaseGoBack: function (t) {
+        return 1 - Math.abs((t *= 2) - 1);
+    },
     $EaseInWave: function (t) {
         return 1 - Math.cos(t * Math.PI * 2)
     },
@@ -256,13 +264,13 @@ var $JssorDirection$ = window.$JssorDirection$ = {
     $TO_BOTTOM: 0x0008,
     $HORIZONTAL: 0x0003,
     $VERTICAL: 0x000C,
-    $LEFTRIGHT: 0x0003,
-    $TOPBOTOM: 0x000C,
-    $TOPLEFT: 0x0005,
-    $TOPRIGHT: 0x0006,
-    $BOTTOMLEFT: 0x0009,
-    $BOTTOMRIGHT: 0x000A,
-    $AROUND: 0x000F,
+    //$LEFTRIGHT: 0x0003,
+    //$TOPBOTOM: 0x000C,
+    //$TOPLEFT: 0x0005,
+    //$TOPRIGHT: 0x0006,
+    //$BOTTOMLEFT: 0x0009,
+    //$BOTTOMRIGHT: 0x000A,
+    //$AROUND: 0x000F,
 
     $GetDirectionHorizontal: function (direction) {
         return direction & 0x0003;
@@ -270,29 +278,29 @@ var $JssorDirection$ = window.$JssorDirection$ = {
     $GetDirectionVertical: function (direction) {
         return direction & 0x000C;
     },
-    $ChessHorizontal: function (direction) {
-        return (~direction & 0x0003) + (direction & 0x000C);
-    },
-    $ChessVertical: function (direction) {
-        return (~direction & 0x000C) + (direction & 0x0003);
-    },
-    $IsToLeft: function (direction) {
-        return (direction & 0x0003) == 0x0001;
-    },
-    $IsToRight: function (direction) {
-        return (direction & 0x0003) == 0x0002;
-    },
-    $IsToTop: function (direction) {
-        return (direction & 0x000C) == 0x0004;
-    },
-    $IsToBottom: function (direction) {
-        return (direction & 0x000C) == 0x0008;
-    },
+    //$ChessHorizontal: function (direction) {
+    //    return (~direction & 0x0003) + (direction & 0x000C);
+    //},
+    //$ChessVertical: function (direction) {
+    //    return (~direction & 0x000C) + (direction & 0x0003);
+    //},
+    //$IsToLeft: function (direction) {
+    //    return (direction & 0x0003) == 0x0001;
+    //},
+    //$IsToRight: function (direction) {
+    //    return (direction & 0x0003) == 0x0002;
+    //},
+    //$IsToTop: function (direction) {
+    //    return (direction & 0x000C) == 0x0004;
+    //},
+    //$IsToBottom: function (direction) {
+    //    return (direction & 0x000C) == 0x0008;
+    //},
     $IsHorizontal: function (direction) {
-        return (direction & 0x0003) > 0;
+        return direction & 0x0003;
     },
     $IsVertical: function (direction) {
-        return (direction & 0x000C) > 0;
+        return direction & 0x000C;
     }
 };
 
@@ -321,82 +329,66 @@ var $JssorKeyCode$ = {
     $UP: 38
 };
 
-var $JssorAlignment$ = {
-    $TopLeft: 0x11,
-    $TopCenter: 0x12,
-    $TopRight: 0x14,
-    $MiddleLeft: 0x21,
-    $MiddleCenter: 0x22,
-    $MiddleRight: 0x24,
-    $BottomLeft: 0x41,
-    $BottomCenter: 0x42,
-    $BottomRight: 0x44,
-
-    $IsTop: function (aligment) {
-        return aligment & 0x10 > 0;
-    },
-    $IsMiddle: function (alignment) {
-        return alignment & 0x20 > 0;
-    },
-    $IsBottom: function (alignment) {
-        return alignment & 0x40 > 0;
-    },
-    $IsLeft: function (alignment) {
-        return alignment & 0x01 > 0;
-    },
-    $IsCenter: function (alignment) {
-        return alignment & 0x02 > 0;
-    },
-    $IsRight: function (alignment) {
-        return alignment & 0x04 > 0;
-    }
-};
-
-var $JssorMatrix$;
-
-var $JssorAnimator$;
-
 // $Jssor$ is a static class, so make it singleton instance
 var $Jssor$ = window.$Jssor$ = new function () {
-    // Fields
     var _This = this;
 
+    //#region Constants
     var REGEX_WHITESPACE_GLOBAL = /\S+/g;
-
+    var ROWSER_OTHER = -1;
     var ROWSER_UNKNOWN = 0;
     var BROWSER_IE = 1;
     var BROWSER_FIREFOX = 2;
-    var BROWSER_FIREFOX = 3;
+    var BROWSER_SAFARI = 3;
     var BROWSER_CHROME = 4;
     var BROWSER_OPERA = 5;
-
     //var arrActiveX = ["Msxml2.XMLHTTP", "Msxml3.XMLHTTP", "Microsoft.XMLHTTP"];
+    //#endregion
 
-    var browser = 0;
-    var browserRuntimeVersion = 0;
-    var browserEngineVersion = 0;
-    var browserJavascriptVersion = 0;
-    var webkitVersion = 0;
+    //#region Variables
+    var _Device;
+    var _Browser = 0;
+    var _BrowserRuntimeVersion = 0;
+    var _BrowserEngineVersion = 0;
+    var _BrowserJavascriptVersion = 0;
+    var _WebkitVersion = 0;
 
-    var app = navigator.appName;
-    var ver = navigator.appVersion;
-    var ua = navigator.userAgent;
+    var _Navigator = navigator;
+    var _AppName = _Navigator.appName;
+    var _AppVersion = _Navigator.appVersion;
+    var _UserAgent = _Navigator.userAgent;
 
     var _DocElmt = document.documentElement;
     var _TransformProperty;
+    //#endregion
 
-    function DetectBrowser() {
-        if (!browser) {
-            if (app == "Microsoft Internet Explorer" &&
+    function Device() {
+        if (!_Device) {
+            _Device = { $Touchable: "ontouchstart" in window || "createTouch" in document };
+
+            var msPrefix;
+            if ((_Navigator.pointerEnabled || (msPrefix = _Navigator.msPointerEnabled))) {
+                _Device.$TouchActionAttr = msPrefix ? "msTouchAction" : "touchAction";
+            }
+        }
+
+        return _Device;
+    }
+
+    function DetectBrowser(browser) {
+        if (!_Browser) {
+            _Browser = -1;
+
+            if (_AppName == "Microsoft Internet Explorer" &&
                 !!window.attachEvent && !!window.ActiveXObject) {
 
-                var ieOffset = ua.indexOf("MSIE");
-                browser = BROWSER_IE;
-                browserEngineVersion = ParseFloat(ua.substring(ieOffset + 5, ua.indexOf(";", ieOffset)));
+                var ieOffset = _UserAgent.indexOf("MSIE");
+                _Browser = BROWSER_IE;
+                _BrowserEngineVersion = ParseFloat(_UserAgent.substring(ieOffset + 5, _UserAgent.indexOf(";", ieOffset)));
 
                 //check IE javascript version
                 /*@cc_on
-                browserJavascriptVersion = @_jscript_version;
+                _BrowserJavascriptVersion = @_jscript_version;
                 @*/
 
                 // update: for intranet sites and compat view list sites, IE sends
@@ -405,77 +397,82 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 // IE7 UA to JS. we should be robust to self
                 //var docMode = document.documentMode;
                 //if (typeof docMode !== "undefined") {
-                //    browserRuntimeVersion = docMode;
+                //    _BrowserRuntimeVersion = docMode;
                 //}
 
-                browserRuntimeVersion = document.documentMode || browserEngineVersion;
+                _BrowserRuntimeVersion = document.documentMode || _BrowserEngineVersion;
 
             }
-            else if (app == "Netscape" && !!window.addEventListener) {
+            else if (_AppName == "Netscape" && !!window.addEventListener) {
 
-                var ffOffset = ua.indexOf("Firefox");
-                var saOffset = ua.indexOf("Safari");
-                var chOffset = ua.indexOf("Chrome");
-                var webkitOffset = ua.indexOf("AppleWebKit");
+                var ffOffset = _UserAgent.indexOf("Firefox");
+                var saOffset = _UserAgent.indexOf("Safari");
+                var chOffset = _UserAgent.indexOf("Chrome");
+                var webkitOffset = _UserAgent.indexOf("AppleWebKit");
 
                 if (ffOffset >= 0) {
-                    browser = BROWSER_FIREFOX;
-                    browserRuntimeVersion = ParseFloat(ua.substring(ffOffset + 8));
+                    _Browser = BROWSER_FIREFOX;
+                    _BrowserRuntimeVersion = ParseFloat(_UserAgent.substring(ffOffset + 8));
                 }
                 else if (saOffset >= 0) {
-                    var slash = ua.substring(0, saOffset).lastIndexOf("/");
-                    browser = (chOffset >= 0) ? BROWSER_CHROME : BROWSER_FIREFOX;
-                    browserRuntimeVersion = ParseFloat(ua.substring(slash + 1, saOffset));
+                    var slash = _UserAgent.substring(0, saOffset).lastIndexOf("/");
+                    _Browser = (chOffset >= 0) ? BROWSER_CHROME : BROWSER_SAFARI;
+                    _BrowserRuntimeVersion = ParseFloat(_UserAgent.substring(slash + 1, saOffset));
+                }
+                else {
+                    //(/Trident.*rv[ :]*11\./i
+                    var match = /Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/i.exec(_UserAgent);
+                    if (match) {
+                        _Browser = BROWSER_IE;
+                        _BrowserRuntimeVersion = _BrowserEngineVersion = ParseFloat(match[1]);
+                    }
                 }
 
                 if (webkitOffset >= 0)
-                    webkitVersion = ParseFloat(ua.substring(webkitOffset + 12));
+                    _WebkitVersion = ParseFloat(_UserAgent.substring(webkitOffset + 12));
             }
             else {
-                var match = /(opera)(?:.*version|)[ \/]([\w.]+)/i.exec(ua);
+                var match = /(opera)(?:.*version|)[ \/]([\w.]+)/i.exec(_UserAgent);
                 if (match) {
-                    browser = BROWSER_OPERA;
-                    browserRuntimeVersion = ParseFloat(match[2]);
+                    _Browser = BROWSER_OPERA;
+                    _BrowserRuntimeVersion = ParseFloat(match[2]);
                 }
             }
         }
+
+        return browser == _Browser;
     }
 
     function IsBrowserIE() {
-        DetectBrowser();
-        return browser == BROWSER_IE;
+        return DetectBrowser(BROWSER_IE);
     }
 
     function IsBrowserIeQuirks() {
-        return IsBrowserIE() && (browserRuntimeVersion < 6 || document.compatMode == "BackCompat");   //Composite to "CSS1Compat"
+        return IsBrowserIE() && (_BrowserRuntimeVersion < 6 || document.compatMode == "BackCompat");   //Composite to "CSS1Compat"
     }
 
     function IsBrowserFireFox() {
-        DetectBrowser();
-        return browser == BROWSER_FIREFOX;
+        return DetectBrowser(BROWSER_FIREFOX);
     }
 
     function IsBrowserSafari() {
-        DetectBrowser();
-        return browser == BROWSER_FIREFOX;
+        return DetectBrowser(BROWSER_SAFARI);
     }
 
     function IsBrowserChrome() {
-        DetectBrowser();
-        return browser == BROWSER_CHROME;
+        return DetectBrowser(BROWSER_CHROME);
     }
 
     function IsBrowserOpera() {
-        DetectBrowser();
-        return browser == BROWSER_OPERA;
+        return DetectBrowser(BROWSER_OPERA);
     }
 
     function IsBrowserBadTransform() {
-        return IsBrowserSafari() && (webkitVersion > 534) && (webkitVersion < 535);
+        return IsBrowserSafari() && (_WebkitVersion > 534) && (_WebkitVersion < 535);
     }
 
     function IsBrowserIe9Earlier() {
-        return IsBrowserIE() && browserRuntimeVersion < 9; 
+        return IsBrowserIE() && _BrowserRuntimeVersion < 9;
     }
 
     function GetTransformProperty(elmt) {
@@ -484,7 +481,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
             // Note that in some versions of IE9 it is critical that
             // msTransform appear in this list before MozTransform
 
-            each(['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'], function (property) {
+            Each(['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'], function (property) {
                 if (elmt.style[property] != undefined) {
                     _TransformProperty = property;
                     return true;
@@ -509,73 +506,61 @@ var $Jssor$ = window.$Jssor$ = new function () {
     }
 
     function toString(obj) {
-        return Object.prototype.toString.call(obj);
+        return {}.toString.call(obj);
     }
 
     // [[Class]] -> type pairs
-    var class2type;
+    var _Class2type;
 
-    function each(object, callback) {
-        if (toString(object) == "[object Array]") {
-            for (var i = 0; i < object.length; i++) {
-                if (callback(object[i], i, object)) {
+    function GetClass2Type() {
+        if (!_Class2type) {
+            _Class2type = {};
+            Each(["Boolean", "Number", "String", "Function", "Array", "Date", "RegExp", "Object"], function (name) {
+                _Class2type["[object " + name + "]"] = name.toLowerCase();
+            });
+        }
+
+        return _Class2type;
+    }
+
+    function Each(obj, callback) {
+        if (toString(obj) == "[object Array]") {
+            for (var i = 0; i < obj.length; i++) {
+                if (callback(obj[i], i, obj)) {
                     return true;
                 }
             }
         }
         else {
-            for (var name in object) {
-                if (callback(object[name], name, object)) {
+            for (var name in obj) {
+                if (callback(obj[name], name, obj)) {
                     return true;
                 }
             }
         }
     }
 
-    function GetClass2Type() {
-        if (!class2type) {
-            class2type = {};
-            each(["Boolean", "Number", "String", "Function", "Array", "Date", "RegExp", "Object"], function (name) {
-                class2type["[object " + name + "]"] = name.toLowerCase();
-            });
-        }
-
-        return class2type;
-    }
-
-    function type(obj) {
+    function Type(obj) {
         return obj == null ? String(obj) : GetClass2Type()[toString(obj)] || "object";
     }
 
-    function isPlainObject(obj) {
-        // Must be an Object.
-        // Because of IE, we also have to check the presence of the constructor property.
-        // Make sure that DOM nodes and window objects don't pass through, as well
-        if (!obj || type(obj) !== "object" || obj.nodeType || _This.$IsWindow(obj)) {
-            return false;
-        }
+    function IsNotEmpty(obj) {
+        for(var name in obj)
+            return true;
+    }
 
-        var hasOwn = Object.prototype.hasOwnProperty;
-
+    function IsPlainObject(obj) {
+        // Not plain objects:
+        // - Any object or value whose internal [[Class]] property is not "[object Object]"
+        // - DOM nodes
+        // - window
         try {
-            // Not own constructor property must be Object
-            if (obj.constructor &&
-				!hasOwn.call(obj, "constructor") &&
-				!hasOwn.call(obj.constructor.prototype, "isPrototypeOf")) {
-                return false;
-            }
-        } catch (e) {
-            // IE8,9 Will throw exceptions on certain host objects #9897
-            return false;
+            return Type(obj) == "object"
+                && !obj.nodeType
+                && obj != obj.window
+                && (!obj.constructor || { }.hasOwnProperty.call(obj.constructor.prototype, "isPrototypeOf"));
         }
-
-        // Own properties are enumerated firstly, so to speed up,
-        // if last one is own, then all properties are own.
-
-        var key;
-        for (key in obj) { }
-
-        return key === undefined || hasOwn.call(obj, key);
+        catch (e) { }
     }
 
     function Point(x, y) {
@@ -601,7 +586,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
     function BuildNewCss(oldCss, removeRegs, replaceValue) {
         var css = (!oldCss || oldCss == "inherit") ? "" : oldCss;
 
-        each(removeRegs, function (removeReg) {
+        Each(removeRegs, function (removeReg) {
             var m = removeReg.exec(css);
 
             if (m) {
@@ -617,14 +602,14 @@ var $Jssor$ = window.$Jssor$ = new function () {
     }
 
     function SetStyleFilterIE(elmt, value) {
-        if (browserRuntimeVersion < 9) {
+        if (_BrowserRuntimeVersion < 9) {
             elmt.style.filter = value;
         }
     }
 
     function SetStyleMatrixIE(elmt, matrix, offset) {
         //matrix is not for ie9+ running in ie8- mode
-        if (browserJavascriptVersion < 9) {
+        if (_BrowserJavascriptVersion < 9) {
             var oldFilterValue = elmt.style.filter;
             var matrixReg = new RegExp(/[\s]*progid:DXImageTransform\.Microsoft\.Matrix\([^\)]*\)/g);
             var matrixValue = matrix ? "progid:DXImageTransform.Microsoft.Matrix(" + "M11=" + matrix[0][0] + ", M12=" + matrix[0][1] + ", M21=" + matrix[1][0] + ", M22=" + matrix[1][1] + ", SizingMethod='auto expand')" : "";
@@ -639,6 +624,8 @@ var $Jssor$ = window.$Jssor$ = new function () {
     }
 
     // Methods
+
+    _This.$Device = Device;
 
     _This.$IsBrowserIE = IsBrowserIE;
 
@@ -657,28 +644,28 @@ var $Jssor$ = window.$Jssor$ = new function () {
     _This.$IsBrowserIe9Earlier = IsBrowserIe9Earlier;
 
     _This.$BrowserVersion = function () {
-        return browserRuntimeVersion;
+        return _BrowserRuntimeVersion;
     };
 
     _This.$BrowserEngineVersion = function () {
-        return browserEngineVersion || browserRuntimeVersion;
+        return _BrowserEngineVersion || _BrowserRuntimeVersion;
     };
 
     _This.$WebKitVersion = function () {
         DetectBrowser();
 
-        return webkitVersion;
+        return _WebkitVersion;
     };
 
     _This.$Delay = Delay;
 
     _This.$Inherit = function (instance, baseClass) {
-        baseClass.apply(instance, [].slice.call(arguments, 2));
+        baseClass.call(instance);
         return Extend({}, instance);
     };
 
-    function Construct(instance, constructor) {
-        instance.constructor === Construct.caller && instance.$Construct && instance.$Construct();
+    function Construct(instance) {
+        instance.constructor === Construct.caller && instance.$Construct && instance.$Construct.apply(instance, Construct.caller.arguments);
     }
 
     _This.$Construct = Construct;
@@ -697,23 +684,28 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
     _This.$GetEvent = GetEvent;
 
-    _This.$EventSrc = function (event) {
+    _This.$EvtSrc = function (event) {
         event = GetEvent(event);
         return event.target || event.srcElement || document;
     };
 
-    _This.$EventDst = function (event) {
+    _This.$EvtTarget = function (event) {
         event = GetEvent(event);
         return event.relatedTarget || event.toElement;
     };
 
+    _This.$EvtWhich = function (event) {
+        event = GetEvent(event);
+        return event.which || [0, 1, 3, 0, 2][event.button] || event.charCode || event.keyCode;
+    };
+
     _This.$MousePosition = function (event) {
         event = GetEvent(event);
-        var body = document.body;
+        //var body = document.body;
 
         return {
-            x: event.pageX || event.clientX + (_DocElmt.scrollLeft || body.scrollLeft || 0) - (_DocElmt.clientLeft || body.clientLeft || 0) || 0,
-            y: event.pageY || event.clientY + (_DocElmt.scrollTop || body.scrollTop || 0) - (_DocElmt.clientTop || body.clientTop || 0) || 0
+            x: event.pageX || event.clientX/* + (_DocElmt.scrollLeft || body.scrollLeft || 0) - (_DocElmt.clientLeft || body.clientLeft || 0)*/ || 0,
+            y: event.pageY || event.clientY/* + (_DocElmt.scrollTop || body.scrollTop || 0) - (_DocElmt.clientTop || body.clientTop || 0)*/ || 0
         };
     };
 
@@ -950,7 +942,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
     }
 
     function GetStyleOpacity(elmt) {
-        if (IsBrowserIE() && browserEngineVersion < 9) {
+        if (IsBrowserIE() && _BrowserEngineVersion < 9) {
             var match = /opacity=([^)]*)/.exec(elmt.style.filter || "");
             return match ? (ParseFloat(match[1]) / 100) : 1;
         }
@@ -960,8 +952,8 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
     function SetStyleOpacity(elmt, opacity, ie9EarlierForce) {
 
-        if (IsBrowserIE() && browserEngineVersion < 9) {
-            //var filterName = "filter"; // browserEngineVersion < 8 ? "filter" : "-ms-filter";
+        if (IsBrowserIE() && _BrowserEngineVersion < 9) {
+            //var filterName = "filter"; // _BrowserEngineVersion < 8 ? "filter" : "-ms-filter";
             var finalFilter = elmt.style.filter || "";
 
             // for CSS filter browsers (IE), remove alpha filter if it's unnecessary.
@@ -977,15 +969,12 @@ var $Jssor$ = window.$Jssor$ = new function () {
             var alphaFilter = "";
             if (ieOpacity < 100 || ie9EarlierForce) {
                 alphaFilter = "alpha(opacity=" + ieOpacity + ") ";
-                //elmt.style["-ms-filter"] = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + ieOpacity + ") ";
             }
 
             var newFilterValue = BuildNewCss(finalFilter, [alphaReg], alphaFilter);
 
             SetStyleFilterIE(elmt, newFilterValue);
         }
-
-            //if (!IsBrowserIE() || browserEngineVersion >= 9) 
         else {
             elmt.style.opacity = opacity == 1 ? "" : Math.round(opacity * 100) / 100;
         }
@@ -1006,7 +995,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 var transformValue = "rotate(" + rotate % 360 + "deg) scale(" + scale + ")";
 
                 //needed for touch device, no need for desktop device
-                if (IsBrowserChrome() && webkitVersion > 535 && "ontouchstart" in window)
+                if (IsBrowserChrome() && _WebkitVersion > 535 && "ontouchstart" in window)
                     transformValue += " perspective(2000px)";
 
                 elmt.style[transformProperty] = transformValue;
@@ -1032,7 +1021,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
     _This.$CssScale = function (elmt, scale) {
 
-        if (IsBrowserIE() && browserEngineVersion < 9 || (browserEngineVersion < 10 && IsBrowserIeQuirks())) {
+        if (IsBrowserIE() && _BrowserEngineVersion < 9 || (_BrowserEngineVersion < 10 && IsBrowserIeQuirks())) {
             elmt.style.zoom = (scale == 1) ? "" : scale;
         }
         else {
@@ -1058,56 +1047,11 @@ var $Jssor$ = window.$Jssor$ = new function () {
     };
 
     _This.$DisableHWA = function (elmt) {
-        //if (force || elmt.style[GetTransformProperty(elmt)] == "perspective(2000px)")
         elmt.style[GetTransformProperty(elmt)] = "none";
     };
 
     var ie8OffsetWidth = 0;
     var ie8OffsetHeight = 0;
-    //var ie8WindowResizeCallbackHandlers;
-    //var ie8LastVerticalScrollbar;
-    //var toggleInfo = "";
-
-    //function Ie8WindowResizeFilter(window, handler) {
-
-    //    var trigger = true;
-
-    //    var checkElement = (IsBrowserIeQuirks() ? window.document.body : window.document.documentElement);
-    //    if (checkElement) {
-    //        //check vertical bar
-    //        //var hasVerticalBar = checkElement.scrollHeight > checkElement.clientHeight;
-    //        //var verticalBarToggle = hasVerticalBar != ie8LastVerticalScrollbar;
-    //        //ie8LastVerticalScrollbar = hasVerticalBar;
-
-    //        var widthChange = checkElement.offsetWidth - ie8OffsetWidth;
-    //        var heightChange = checkElement.offsetHeight - ie8OffsetHeight;
-    //        if (widthChange || heightChange) {
-
-    //            ie8OffsetWidth += widthChange;
-    //            ie8OffsetHeight += heightChange;
-    //        }
-    //        else
-    //            trigger = false;
-    //    }
-
-    //    trigger && handler();
-    //}
-
-    //_This.$OnWindowResize = function (window, handler) {
-
-    //    if (IsBrowserIE() && browserEngineVersion < 9) {
-    //        if (!ie8WindowResizeCallbackHandlers) {
-    //            ie8WindowResizeCallbackHandlers = [handler];
-    //            handler = _This.$CreateCallback(null, Ie8WindowResizeFilter, window);
-    //        }
-    //        else {
-    //            ie8WindowResizeCallbackHandlers.push(handler);
-    //            return;
-    //        }
-    //    }
-
-    //    _This.$AddEvent(window, "resize", handler);
-    //};
 
     _This.$WindowResizeFilter = function (window, handler) {
         return IsBrowserIe9Earlier() ? function () {
@@ -1116,11 +1060,6 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
             var checkElement = (IsBrowserIeQuirks() ? window.document.body : window.document.documentElement);
             if (checkElement) {
-                //check vertical bar
-                //var hasVerticalBar = checkElement.scrollHeight > checkElement.clientHeight;
-                //var verticalBarToggle = hasVerticalBar != ie8LastVerticalScrollbar;
-                //ie8LastVerticalScrollbar = hasVerticalBar;
-
                 var widthChange = checkElement.offsetWidth - ie8OffsetWidth;
                 var heightChange = checkElement.offsetHeight - ie8OffsetHeight;
                 if (widthChange || heightChange) {
@@ -1162,6 +1101,20 @@ var $Jssor$ = window.$Jssor$ = new function () {
     _This.$AddEvent = function (elmt, eventName, handler, useCapture) {
         elmt = _This.$GetElement(elmt);
 
+        $JssorDebug$.$Execute(function () {
+            if (!elmt) {
+                $JssorDebug$.$Fail("Parameter 'elmt' not specified.");
+            }
+
+            if (!handler) {
+                $JssorDebug$.$Fail("Parameter 'handler' not specified.");
+            }
+
+            if (!elmt.addEventListener && !elmt.attachEvent) {
+                $JssorDebug$.$Fail("Unable to attach event handler, no known technique.");
+            }
+        });
+
         // technique from:
         // http://blog.paranoidferret.com/index.php/2007/08/10/javascript-working-with-events/
 
@@ -1179,13 +1132,6 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 elmt.setCapture();
             }
         }
-
-        $JssorDebug$.$Execute(function () {
-            if (!elmt.addEventListener && !elmt.attachEvent) {
-                $JssorDebug$.$Fail("Unable to attach event handler, no known technique.");
-            }
-        });
-
     };
 
     _This.$RemoveEvent = function (elmt, eventName, handler, useCapture) {
@@ -1233,28 +1179,10 @@ var $Jssor$ = window.$Jssor$ = new function () {
         else {
             var ieEventName = "on" + eventName;
             evento = document.createEventObject();
-            //event.eventType = ieEventName;
-            //event.eventName = ieEventName;
 
             elmt.fireEvent(ieEventName, evento);
         }
     };
-
-    _This.$AddEventBrowserMouseUp = function (handler, userCapture) {
-        _This.$AddEvent((IsBrowserIe9Earlier()) ? document : window, "mouseup", handler, userCapture);
-    };
-
-    _This.$RemoveEventBrowserMouseUp = function (handler, userCapture) {
-        _This.$RemoveEvent((IsBrowserIe9Earlier()) ? document : window, "mouseup", handler, userCapture);
-    };
-
-    //_This.$AddEventBrowserMouseDown = function (handler, userCapture) {
-    //    _This.$AddEvent((IsBrowserIe9Earlier()) ? document : window, "mousedown", handler, userCapture);
-    //};
-
-    //_This.$RemoveEventBrowserMouseDown = function (handler, userCapture) {
-    //    _This.$RemoveEvent((IsBrowserIe9Earlier()) ? document : window, "mousedown", handler, userCapture);
-    //};
 
     _This.$CancelEvent = function (event) {
         event = GetEvent(event);
@@ -1300,26 +1228,15 @@ var $Jssor$ = window.$Jssor$ = new function () {
         return callback;
     };
 
-    var _Freeer;
-    _This.$FreeElement = function (elmt) {
-        if (!_Freeer)
-            _Freeer = _This.$CreateDiv();
-
-        if (elmt) {
-            $Jssor$.$AppendChild(_Freeer, elmt);
-            $Jssor$.$ClearInnerHtml(_Freeer);
-        }
-    };
-
     _This.$InnerText = function (elmt, text) {
         if (text == undefined)
             return elmt.textContent || elmt.innerText;
 
         var textNode = document.createTextNode(text);
-        _This.$ClearInnerHtml(elmt);
+        _This.$Empty(elmt);
         elmt.appendChild(textNode);
     };
-    
+
     _This.$InnerHtml = function (elmt, html) {
         if (html == undefined)
             return elmt.innerHTML;
@@ -1378,11 +1295,11 @@ var $Jssor$ = window.$Jssor$ = new function () {
         }
     };
 
-    _This.$Children = function (elmt) {
+    _This.$Children = function (elmt, includeAll) {
         var children = [];
 
         for (var tmpEl = elmt.firstChild; tmpEl; tmpEl = tmpEl.nextSibling) {
-            if (tmpEl.nodeType == 1) {
+            if (includeAll || tmpEl.nodeType == 1) {
                 children.push(tmpEl);
             }
         }
@@ -1475,16 +1392,81 @@ var $Jssor$ = window.$Jssor$ = new function () {
         return elmt.getElementsByTagName(tagName);
     };
 
-    function Extend(target) {
-        for (var i = 1; i < arguments.length; i++) {
+    //function Extend() {
+    //    var args = arguments;
+    //    var target;
+    //    var options;
+    //    var propName;
+    //    var propValue;
+    //    var targetPropValue;
+    //    var purpose = 7 & args[0];
+    //    var deep = 1 & purpose;
+    //    var unextend = 2 & purpose;
+    //    var i = purpose ? 2 : 1;
+    //    target = args[i - 1] || {};
 
-            var options = arguments[i];
+    //    for (; i < args.length; i++) {
+    //        // Only deal with non-null/undefined values
+    //        if (options = args[i]) {
+    //            // Extend the base object
+    //            for (propName in options) {
+    //                propValue = options[propName];
 
+    //                if (propValue !== undefined) {
+    //                    propValue = options[propName];
+
+    //                    if (unextend) {
+    //                        targetPropValue = target[propName];
+    //                        if (propValue === targetPropValue)
+    //                            delete target[propName];
+    //                        else if (deep && IsPlainObject(targetPropValue)) {
+    //                            Extend(purpose, targetPropValue, propValue);
+    //                        }
+    //                    }
+    //                    else {
+    //                        target[propName] = (deep && IsPlainObject(target[propName])) ? Extend(purpose | 4, {}, propValue) : propValue;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    // Return the modified object
+    //    return target;
+    //}
+
+    //function Unextend() {
+    //    var args = arguments;
+    //    var newArgs = [].slice.call(arguments);
+    //    var purpose = 1 & args[0];
+
+    //    purpose && newArgs.shift();
+    //    newArgs.unshift(purpose | 2);
+
+    //    return Extend.apply(null, newArgs);
+    //}
+
+    function Extend() {
+        var args = arguments;
+        var target;
+        var options;
+        var propName;
+        var propValue;
+        var deep = 1 & args[0];
+        var i = 1 + deep;
+        target = args[i - 1] || {};
+
+        for (; i < args.length; i++) {
             // Only deal with non-null/undefined values
-            if (options) {
+            if (options = args[i]) {
                 // Extend the base object
-                for (var name in options) {
-                    target[name] = options[name];
+                for (propName in options) {
+                    propValue = options[propName];
+
+                    if (propValue !== undefined) {
+                        propValue = options[propName];
+                        target[propName] = (deep && IsPlainObject(target[propName])) ? Extend(deep, {}, propValue) : propValue;
+                    }
                 }
             }
         }
@@ -1495,15 +1477,28 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
     _This.$Extend = Extend;
 
-    function Unextend(target, options) {
-        $JssorDebug$.$Assert(options);
+    function Unextend(target, option) {
+        $JssorDebug$.$Assert(option);
 
         var unextended = {};
+        var name;
+        var targetProp;
+        var optionProp;
 
         // Extend the base object
-        for (var name in target) {
-            if (target[name] != options[name]) {
-                unextended[name] = target[name];
+        for (name in target) {
+            targetProp = target[name];
+            optionProp = option[name];
+
+            if (targetProp !== optionProp) {
+                var exclude;
+
+                if (IsPlainObject(targetProp) && IsPlainObject(optionProp)) {
+                    targetProp = Unextend(optionProp);
+                    exclude = !IsNotEmpty(targetProp);
+                }
+                
+                !exclude && (unextended[name] = targetProp);
             }
         }
 
@@ -1513,36 +1508,30 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
     _This.$Unextend = Unextend;
 
-    _This.$IsUndefined = function (obj) {
-        return type(obj) == "undefined";
-    };
-
     _This.$IsFunction = function (obj) {
-        return type(obj) == "function";
+        return Type(obj) == "function";
     };
 
     _This.$IsArray = function (obj) {
-        return type(obj) == "array";
+        return Type(obj) == "array";
     };
 
     _This.$IsString = function (obj) {
-        return type(obj) == "string";
+        return Type(obj) == "string";
     };
 
     _This.$IsNumeric = function (obj) {
         return !isNaN(ParseFloat(obj)) && isFinite(obj);
     };
 
-    _This.$IsWindow = function (obj) {
-        return obj && obj == obj.window;
-    };
-
-    _This.$Type = type;
+    _This.$Type = Type;
 
     // args is for internal usage only
-    _This.$Each = each;
+    _This.$Each = Each;
 
-    _This.$IsPlainObject = isPlainObject;
+    _This.$IsNotEmpty = IsNotEmpty;
+
+    _This.$IsPlainObject = IsPlainObject;
 
     function CreateElement(tagName) {
         return document.createElement(tagName);
@@ -1551,11 +1540,11 @@ var $Jssor$ = window.$Jssor$ = new function () {
     _This.$CreateElement = CreateElement;
 
     _This.$CreateDiv = function () {
-        return CreateElement("DIV", document);
+        return CreateElement("DIV");
     };
 
     _This.$CreateSpan = function () {
-        return CreateElement("SPAN", document);
+        return CreateElement("SPAN");
     };
 
     _This.$EmptyFunction = function () { };
@@ -1586,26 +1575,33 @@ var $Jssor$ = window.$Jssor$ = new function () {
     function ToHash(array) {
         var hash = {};
 
-        each(array, function (item) {
+        Each(array, function (item) {
             hash[item] = item;
         });
 
         return hash;
     }
 
+    function Split(str, separator) {
+        return str.match(separator || REGEX_WHITESPACE_GLOBAL);
+    }
+
+    function StringToHashObject(str, regExp) {
+        return ToHash(Split(str || "", regExp));
+    }
+
     _This.$ToHash = ToHash;
+    _This.$Split = Split;
 
     function Join(separator, strings) {
         ///	<param name="separator" type="String">
-        ///		The element to show the dialog around
         ///	</param>
         ///	<param name="strings" type="Array" value="['1']">
-        ///		The element to show the dialog around
         ///	</param>
 
         var joined = "";
 
-        each(strings, function (str) {
+        Each(strings, function (str) {
             joined && (joined += separator);
             joined += str;
         });
@@ -1613,16 +1609,19 @@ var $Jssor$ = window.$Jssor$ = new function () {
         return joined;
     }
 
+    function ReplaceClass(elmt, oldClassName, newClassName) {
+        ClassName(elmt, Join(" ", Extend(Unextend(StringToHashObject(ClassName(elmt)), StringToHashObject(oldClassName)), StringToHashObject(newClassName))));
+    }
+
     _This.$Join = Join;
 
     _This.$AddClass = function (elmt, className) {
-        var newClassName = ClassName(elmt) + " " + className;
-        ClassName(elmt, Join(" ", ToHash(newClassName.match(REGEX_WHITESPACE_GLOBAL))));
+        ReplaceClass(elmt, null, className);
     };
 
-    _This.$RemoveClass = function (elmt, className) {
-        ClassName(elmt, Join(" ", _This.$Unextend(ToHash(ClassName(elmt).match(REGEX_WHITESPACE_GLOBAL)), ToHash(className.match(REGEX_WHITESPACE_GLOBAL)))));
-    };
+    _This.$RemoveClass = ReplaceClass;
+
+    _This.$ReplaceClass = ReplaceClass;
 
     _This.$ParentNode = function (elmt) {
         return elmt.parentNode;
@@ -1662,7 +1661,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
     };
 
     _This.$CanClearClip = function () {
-        return IsBrowserIE() && browserRuntimeVersion < 10;
+        return IsBrowserIE() && _BrowserRuntimeVersion < 10;
     };
 
     _This.$SetStyleClip = function (elmt, clip) {
@@ -1694,46 +1693,84 @@ var $Jssor$ = window.$Jssor$ = new function () {
     };
 
     _This.$AppendChildren = function (elmt, children) {
-        each(children, function (child) {
+        Each(children, function (child) {
             _This.$AppendChild(elmt, child);
         });
     };
 
-    _This.$InsertBefore = function (elmt, child, refObject) {
-        elmt.insertBefore(child, refObject);
+    _This.$InsertBefore = function (newNode, refNode, pNode) {
+        ///	<summary>
+        ///		Insert a node before a reference node
+        ///	</summary>
+        ///	<param name="newNode" type="HTMLElement">
+        ///		A new node to insert
+        ///	</param>
+        ///	<param name="refNode" type="HTMLElement">
+        ///		The reference node to insert a new node before
+        ///	</param>
+        ///	<param name="pNode" type="HTMLElement" optional="true">
+        ///		The parent node to insert node to
+        ///	</param>
+
+        (pNode || refNode.parentNode).insertBefore(newNode, refNode);
     };
 
-    _This.$InsertAdjacentHtml = function (elmt, where, text) {
-        elmt.insertAdjacentHTML(where, text);
+    _This.$InsertAfter = function (newNode, refNode, pNode) {
+        ///	<summary>
+        ///		Insert a node after a reference node
+        ///	</summary>
+        ///	<param name="newNode" type="HTMLElement">
+        ///		A new node to insert
+        ///	</param>
+        ///	<param name="refNode" type="HTMLElement">
+        ///		The reference node to insert a new node after
+        ///	</param>
+        ///	<param name="pNode" type="HTMLElement" optional="true">
+        ///		The parent node to insert node to
+        ///	</param>
+
+        _This.$InsertBefore(newNode, refNode.nextSibling, pNode || refNode.parentNode);
     };
 
-    _This.$RemoveChild = function (elmt, child) {
-        elmt.removeChild(child);
+    _This.$InsertAdjacentHtml = function (elmt, where, html) {
+        elmt.insertAdjacentHTML(where, html);
     };
 
-    _This.$RemoveChildren = function (elmt, children) {
-        each(children, function (child) {
-            _This.$RemoveChild(elmt, child);
+    _This.$RemoveElement = function (elmt, pNode) {
+        ///	<summary>
+        ///		Remove element from parent node
+        ///	</summary>
+        ///	<param name="elmt" type="HTMLElement">
+        ///		The element to remove
+        ///	</param>
+        ///	<param name="pNode" type="HTMLElement" optional="true">
+        ///		The parent node to remove elment from
+        ///	</param>
+        (pNode || elmt.parentNode).removeChild(elmt);
+    };
+
+    _This.$RemoveElements = function (elmts, pNode) {
+        Each(elmts, function (elmt) {
+            _This.$RemoveElement(elmt, pNode);
         });
     };
 
-    _This.$ClearChildren = function (elmt) {
-        _This.$RemoveChildren(elmt, _This.$Children(elmt));
+    _This.$Empty = function (elmt) {
+        _This.$RemoveElements(_This.$Children(elmt, true), elmt);
     };
 
     _This.$ParseInt = function (str, radix) {
         return parseInt(str, radix || 10);
     };
 
-    function ParseFloat(str) {
-        return parseFloat(str);
-    }
+    var ParseFloat = parseFloat;
 
     _This.$ParseFloat = ParseFloat;
 
     _This.$IsChild = function (elmtA, elmtB) {
         var body = document.body;
-        while (elmtB && elmtA != elmtB && body != elmtB) {
+
+        while (elmtB && elmtA !== elmtB && body !== elmtB) {
             try {
                 elmtB = elmtB.parentNode;
             } catch (e) {
@@ -1742,122 +1779,25 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 return false;
             }
         }
-        return elmtA == elmtB;
+
+        return elmtA === elmtB;
     };
 
-    function CloneNode(elmt, noDeep) {
-        return elmt.cloneNode(!noDeep);
+    function CloneNode(elmt, noDeep, keepId) {
+        var clone = elmt.cloneNode(!noDeep);
+        if (!keepId) {
+            _This.$RemoveAttribute(clone, "id");
+        }
+
+        return clone;
     }
 
     _This.$CloneNode = CloneNode;
 
-    function TranslateTransition(transition) {
-        if (transition) {
-            var flyDirection = transition.$FlyDirection;
-
-            if (flyDirection & 1) {
-                transition.x = transition.$ScaleHorizontal || 1;
-            }
-            if (flyDirection & 2) {
-                transition.x = -transition.$ScaleHorizontal || -1;
-            }
-            if (flyDirection & 4) {
-                transition.y = transition.$ScaleVertical || 1;
-            }
-            if (flyDirection & 8) {
-                transition.y = -transition.$ScaleVertical || -1;
-            }
-
-            if (transition.$Rotate == true)
-                transition.$Rotate = 1;
-
-            TranslateTransition(transition.$Brother);
-        }
-    }
-
-    _This.$TranslateTransitions = function (transitions) {
-        ///	<summary>
-        ///		For backward compatibility only.
-        ///	</summary>
-        if (transitions) {
-            for (var i = 0; i < transitions.length; i++) {
-                TranslateTransition(transitions[i]);
-            }
-            for (var name in transitions) {
-                TranslateTransition(transitions[name]);
-            }
-        }
-    };
-
-    //function ImageLoader() {
-    //    var _ThisImageLoader = this;
-    //    var _BaseImageLoader = _This.$Inherit(_ThisImageLoader, $JssorObject$);
-
-    //    var _ImageLoading = 1;
-    //    var _MainImageSrc;
-    //    var _MainImage;
-    //    var _CompleteCallback;
-    //    var _MainImageAbort;
-
-    //    function LoadCompleteCallback(image, abort) {
-    //        _ImageLoading--;
-
-    //        if (image) {
-    //            _This.$RemoveEvent(image, "load");
-    //            _This.$RemoveEvent(image, "abort");
-    //            _This.$RemoveEvent(image, "error");
-
-    //            if (_MainImageSrc == image.src) {
-    //                _MainImage = image;
-    //                _MainImageAbort = abort;
-    //            }
-    //        }
-
-    //        _CompleteCallback && _CompleteCallback(_MainImage, _MainImageAbort);
-    //    }
-
-    //    function LoadImage(src) {
-    //        _ImageLoading++;
-
-    //        if (IsBrowserOpera() && browserRuntimeVersion < 11.6 || !src) {
-    //            LoadImageCallback(callback, null, !src);
-    //        }
-    //        else {
-    //            var image = new Image();
-
-    //            _This.$AddEvent(image, "load", _This.$CreateCallback(null, LoadImageCallback, image, false));
-
-    //            var abortHandler = _This.$CreateCallback(null, LoadImageCallback, image, true);
-    //            _This.$AddEvent(image, "abort", abortHandler);
-    //            _This.$AddEvent(image, "error", abortHandler);
-
-    //            image.src = src;
-    //        }
-    //    }
-
-    //    _ThisImageLoader.$LoadImage = function (src, callback) {
-    //        _MainImageSrc = src;
-    //        _CompleteCallback = callback;
-
-    //        LoadImage(src);
-    //        LoadComplete();
-    //    };
-
-    //    _ThisImageLoader.$LoadImages = function (imageElmts, mainImageElmt, callback) {
-    //        mainImageElmt && (_MainImageSrc = mainImageElmt.src);
-    //        _CompleteCallback = callback;
-
-    //        each(imageElmts, function (imageElmt) {
-    //            LoadImage(imageElmt.src);
-    //        });
-    //        LoadComplete();
-    //    };
-    //}
-
     _This.$LoadImage = function (src, callback) {
         var image = new Image();
 
-        function LoadImageCompleteHandler(abort) {
+        function LoadImageCompleteHandler(event, abort) {
             _This.$RemoveEvent(image, "load", LoadImageCompleteHandler);
             _This.$RemoveEvent(image, "abort", ErrorOrAbortHandler);
             _This.$RemoveEvent(image, "error", ErrorOrAbortHandler);
@@ -1866,11 +1806,11 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 callback(image, abort);
         }
 
-        function ErrorOrAbortHandler() {
-            LoadImageCompleteHandler(true);
+        function ErrorOrAbortHandler(event) {
+            LoadImageCompleteHandler(event, true);
         }
 
-        if (IsBrowserOpera() && browserRuntimeVersion < 11.6 || !src) {
+        if (IsBrowserOpera() && _BrowserRuntimeVersion < 11.6 || !src) {
             LoadImageCompleteHandler(!src);
         }
         else {
@@ -1878,7 +1818,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
             _This.$AddEvent(image, "load", LoadImageCompleteHandler);
             _This.$AddEvent(image, "abort", ErrorOrAbortHandler);
             _This.$AddEvent(image, "error", ErrorOrAbortHandler);
-            
+
             image.src = src;
         }
     };
@@ -1888,13 +1828,14 @@ var $Jssor$ = window.$Jssor$ = new function () {
         var _ImageLoading = imageElmts.length + 1;
 
         function LoadImageCompleteEventHandler(image, abort) {
+
             _ImageLoading--;
             if (mainImageElmt && image && image.src == mainImageElmt.src)
                 mainImageElmt = image;
             !_ImageLoading && callback && callback(mainImageElmt);
         }
 
-        each(imageElmts, function (imageElmt) {
+        Each(imageElmts, function (imageElmt) {
             _This.$LoadImage(imageElmt.src, LoadImageCompleteEventHandler);
         });
 
@@ -1909,112 +1850,100 @@ var $Jssor$ = window.$Jssor$ = new function () {
         if (!templateHolders.length)
             templateHolders = $Jssor$.$GetElementsByTag(template, tagName);
 
-        for (var j = templateHolders.length -1; j > -1; j--) {
+        for (var j = templateHolders.length - 1; j > -1; j--) {
             var templateHolder = templateHolders[j];
             var replaceItem = CloneNode(replacer);
             ClassName(replaceItem, ClassName(templateHolder));
             $Jssor$.$CssCssText(replaceItem, templateHolder.style.cssText);
 
-            var thumbnailPlaceHolderParent = $Jssor$.$ParentNode(templateHolder);
-            $Jssor$.$InsertBefore(thumbnailPlaceHolderParent, replaceItem, templateHolder);
-            $Jssor$.$RemoveChild(thumbnailPlaceHolderParent, templateHolder);
+            $Jssor$.$InsertBefore(replaceItem, templateHolder);
+            $Jssor$.$RemoveElement(templateHolder);
         }
 
         return template;
     };
 
-    var _MouseDownButtons;
     function JssorButtonEx(elmt) {
         var _Self = this;
 
-        var _OriginClassName;
+        var _OriginClassName = "";
+        var _ToggleClassSuffixes = ["av", "pv", "ds", "dn"];
+        var _ToggleClasses = [];
+        var _ToggleClassName;
 
-        var _IsMouseDown;   //class name 'dn'
-        var _IsActive;      //class name 'av'
-        var _IsDisabled;    //class name 'ds'
+        var _IsMouseDown = 0;   //class name 'dn'
+        var _IsSelected = 0;    //class name 1(active): 'av', 2(passive): 'pv'
+        var _IsDisabled = 0;    //class name 'ds'
 
         function Highlight() {
-            var className = _OriginClassName;
-
-            if (_IsDisabled) {
-                className += 'ds';
-            }
-            else if (_IsMouseDown) {
-                className += 'dn';
-            }
-            else if (_IsActive) {
-                className += "av";
-            }
-
-            ClassName(elmt, className);
+            ReplaceClass(elmt, _ToggleClassName, _ToggleClasses[_IsDisabled || _IsMouseDown || (_IsSelected & 2) || _IsSelected]);
         }
 
-        function OnMouseDown(event) {
+        function MouseUpOrCancelEventHandler(event) {
+            _IsMouseDown = 0;
+
+            Highlight();
+
+            _This.$RemoveEvent(document, "mouseup", MouseUpOrCancelEventHandler);
+            _This.$RemoveEvent(document, "touchend", MouseUpOrCancelEventHandler);
+            _This.$RemoveEvent(document, "touchcancel", MouseUpOrCancelEventHandler);
+        }
+
+        function MouseDownEventHandler(event) {
             if (_IsDisabled) {
                 _This.$CancelEvent(event);
             }
             else {
-                _MouseDownButtons.push(_Self);
 
-                _IsMouseDown = true;
+                _IsMouseDown = 4;
 
                 Highlight();
+
+                _This.$AddEvent(document, "mouseup", MouseUpOrCancelEventHandler);
+                _This.$AddEvent(document, "touchend", MouseUpOrCancelEventHandler);
+                _This.$AddEvent(document, "touchcancel", MouseUpOrCancelEventHandler);
             }
         }
 
-        _Self.$MouseUp = function () {
-            ///	<summary>
-            ///		Internal member function, do not use it.
-            ///	</summary>
-            ///	<private />
-
-            _IsMouseDown = false;
-
-            Highlight();
-        };
-
-        _Self.$Activate = function (activate) {
+        _Self.$Selected = function (activate) {
             if (activate != undefined) {
-                _IsActive = activate;
+                _IsSelected = (activate & 2) || (activate & 1);
 
                 Highlight();
             }
             else {
-                return _IsActive;
+                return _IsSelected;
             }
         };
 
         _Self.$Enable = function (enable) {
-            if (enable != undefined) {
-                _IsDisabled = !enable;
-
-                Highlight();
-            }
-            else {
+            if (enable == undefined) {
                 return !_IsDisabled;
             }
+
+            _IsDisabled = enable ? 0 : 3;
+
+            Highlight();
         };
 
         //JssorButtonEx Constructor
         {
             elmt = _This.$GetElement(elmt);
 
-            if (!_MouseDownButtons) {
-                _This.$AddEventBrowserMouseUp(function () {
-                    var oldMouseDownButtons = _MouseDownButtons;
-                    _MouseDownButtons = [];
+            var originalClassNameArray = $Jssor$.$Split(ClassName(elmt));
+            if (originalClassNameArray)
+                _OriginClassName = originalClassNameArray.shift();
 
-                    each(oldMouseDownButtons, function (button) {
-                        button.$MouseUp();
-                    });
-                });
+            Each(_ToggleClassSuffixes, function (toggleClassSuffix) {
+                _ToggleClasses.push(_OriginClassName +toggleClassSuffix);
+            });
 
-                _MouseDownButtons = [];
-            }
+            _ToggleClassName = Join(" ", _ToggleClasses);
 
-            _OriginClassName = ClassName(elmt);
+            _ToggleClasses.unshift("");
 
-            $Jssor$.$AddEvent(elmt, "mousedown", OnMouseDown);
+            _This.$AddEvent(elmt, "mousedown", MouseDownEventHandler);
+            _This.$AddEvent(elmt, "touchstart", MouseDownEventHandler);
         }
     }
 
@@ -2037,8 +1966,8 @@ var $Jssor$ = window.$Jssor$ = new function () {
     _This.$CssPosition = CssProxy("position");
     _This.$CssDisplay = CssProxy("display");
     _This.$CssZIndex = CssProxy("zIndex", 1);
-    _This.$CssFloat = function (elmt, float) {
-        return Css(elmt, IsBrowserIE() ? "styleFloat" : "cssFloat", float);
+    _This.$CssFloat = function (elmt, floatValue) {
+        return Css(elmt, IsBrowserIE() ? "styleFloat" : "cssFloat", floatValue);
     };
     _This.$CssOpacity = function (elmt, opacity, ie9EarlierForce) {
         if (opacity != undefined) {
@@ -2101,7 +2030,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
 
         var styles = {};
 
-        each(originStyles, function (value, key) {
+        Each(originStyles, function (value, key) {
             if (_StyleGetter[key]) {
                 styles[key] = _StyleGetter[key](elmt);
             }
@@ -2113,7 +2042,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
     _This.$SetStyles = function (elmt, styles) {
         var styleSetter = StyleSetter();
 
-        each(styles, function (value, key) {
+        Each(styles, function (value, key) {
             styleSetter[key] && styleSetter[key](elmt, value);
         });
     };
@@ -2124,7 +2053,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
         _This.$SetStyles(elmt, styles);
     };
 
-    $JssorMatrix$ = new function () {
+    var $JssorMatrix$ = new function () {
         var _ThisMatrix = this;
 
         function Multiply(ma, mb) {
@@ -2194,14 +2123,15 @@ var $Jssor$ = window.$Jssor$ = new function () {
         return Point(Math.min(p1.x, p2.x, p3.x, p4.x) + width / 2, Math.min(p1.y, p2.y, p3.y, p4.y) + height / 2);
     };
 
-    _This.$Transform = function (fromStyles, toStyles, interPosition, easings, durings, rounds, options) {
+    _This.$Cast = function (fromStyles, difStyles, interPosition, easings, durings, rounds, options) {
 
-        var currentStyles = toStyles;
+        var currentStyles = difStyles;
 
         if (fromStyles) {
             currentStyles = {};
 
-            for (var key in toStyles) {
+            for (var key in difStyles) {
+
                 var round = rounds[key] || 1;
                 var during = durings[key] || [0, 1];
                 var propertyInterPosition = (interPosition - during[0]) / during[1];
@@ -2211,19 +2141,20 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 if (propertyInterPosition != floorPosition)
                     propertyInterPosition -= floorPosition;
 
-                var easing = easings[key] || easings.$Default;
+                var easing = easings[key] || easings.$Default || $JssorEasing$.$EaseSwing;
                 var easingValue = easing(propertyInterPosition);
                 var currentPropertyValue;
                 var value = fromStyles[key];
-                var toValue = toStyles[key];
+                var toValue = difStyles[key];
+                var difValue = difStyles[key];
 
-                if ($Jssor$.$IsNumeric(toValue)) {
-                    currentPropertyValue = value + (toValue - value) * easingValue;
+                if ($Jssor$.$IsNumeric(difValue)) {
+                    currentPropertyValue = value + difValue * easingValue;
                 }
                 else {
                     currentPropertyValue = $Jssor$.$Extend({ $Offset: {} }, fromStyles[key]);
 
-                    $Jssor$.$Each(toValue.$Offset, function (rectX, n) {
+                    $Jssor$.$Each(difValue.$Offset, function (rectX, n) {
                         var offsetValue = rectX * easingValue;
                         currentPropertyValue.$Offset[n] = offsetValue;
                         currentPropertyValue[n] += offsetValue;
@@ -2232,12 +2163,12 @@ var $Jssor$ = window.$Jssor$ = new function () {
                 currentStyles[key] = currentPropertyValue;
             }
 
-            if (fromStyles.$Zoom) {
+            if (difStyles.$Zoom || difStyles.$Rotate) {
                 currentStyles.$Transform = { $Rotate: currentStyles.$Rotate || 0, $Scale: currentStyles.$Zoom, $OriginalWidth: options.$OriginalWidth, $OriginalHeight: options.$OriginalHeight };
             }
         }
 
-        if (toStyles.$Clip && options.$Move) {
+        if (difStyles.$Clip && options.$Move) {
             var styleFrameNClipOffset = currentStyles.$Clip.$Offset;
 
             var offsetY = (styleFrameNClipOffset.$Top || 0) + (styleFrameNClipOffset.$Bottom || 0);
@@ -2259,7 +2190,7 @@ var $Jssor$ = window.$Jssor$ = new function () {
 };
 
 //$JssorObject$
-var $JssorObject$ = window.$JssorObject$ = function () {
+function $JssorObject$() {
     var _ThisObject = this;
     // Fields
 
@@ -2377,13 +2308,7 @@ var $JssorObject$ = window.$JssorObject$ = function () {
         var args = [].slice.call(arguments, 1);
 
         $Jssor$.$Each(_Listeners, function (listener) {
-            try {
-                listener.$EventName == eventName && listener.$Handler.apply(window, args);
-            } catch (e) {
-                // handler threw an error, ignore, go on to next one
-                $JssorDebug$.$Error(e.name + " while executing " + eventName +
-                        " handler: " + e.message, e);
-            }
+            listener.$EventName == eventName && listener.$Handler.apply(window, args);
         });
     };
 
@@ -2398,7 +2323,7 @@ var $JssorObject$ = window.$JssorObject$ = function () {
     $JssorDebug$.$C_AbstractClass(_ThisObject);
 };
 
-$JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles) {
+function $JssorAnimator$(delay, duration, options, elmt, fromStyles, difStyles) {
     delay = delay || 0;
 
     var _ThisAnimator = this;
@@ -2415,6 +2340,7 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
     var _SubDurings;
     var _Callback;
 
+    var _Shift = 0;
     var _Position_Current = 0;
     var _Position_Display = 0;
     var _Hooked;
@@ -2457,9 +2383,7 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
         _Position_Current += offset;
         _Position_Display += offset;
 
-        $Jssor$.$Each(_NestedAnimators, function (animator) {
-            animator, animator.$Shift(offset);
-        });
+        _Shift = offset;
     }
 
     function Locate(position, relative) {
@@ -2490,18 +2414,15 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
             positionToDisplay = Math.max(positionToDisplay, _Position_OuterBegin);
 
             if (!_Hooked || _NoStop || force || positionToDisplay != _Position_Display) {
-                if (toStyles) {
+
+                if (difStyles) {
 
                     var interPosition = (positionToDisplay - _Position_InnerBegin) / (duration || 1);
-
-                    //if (options.$Optimize && $Jssor$.$IsBrowserChrome() && duration) {
-                    //    interPosition = Math.round(interPosition / 8 * duration) * 8 / duration;
-                    //}
 
                     if (options.$Reverse)
                         interPosition = 1 - interPosition;
 
-                    var currentStyles = $Jssor$.$Transform(fromStyles, toStyles, interPosition, _SubEasings, _SubDurings, _SubRounds, options);
+                    var currentStyles = $Jssor$.$Cast(fromStyles, difStyles, interPosition, _SubEasings, _SubDurings, _SubRounds, options);
 
                     $Jssor$.$Each(currentStyles, function (value, key) {
                         _StyleSetter[key] && _StyleSetter[key](elmt, value);
@@ -2509,26 +2430,26 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
                 }
 
                 _ThisAnimator.$OnInnerOffsetChange(_Position_Display - _Position_InnerBegin, positionToDisplay - _Position_InnerBegin);
+
+                _Position_Display = positionToDisplay;
+
+                $Jssor$.$Each(_NestedAnimators, function (animator, i) {
+                    var nestedAnimator = positionOuter < _Position_Current ? _NestedAnimators[_NestedAnimators.length - i - 1] : animator;
+                    nestedAnimator.$GoToPosition(_Position_Display - _Shift, force);
+                });
+
+                var positionOld = _Position_Current;
+                var positionNew = _Position_Display;
+
+                _Position_Current = trimedPositionOuter;
+                _Hooked = true;
+
+                _ThisAnimator.$OnPositionChange(positionOld, positionNew);
             }
-
-            _Position_Display = positionToDisplay;
-
-            $Jssor$.$Each(_NestedAnimators, function (animator, i) {
-                var nestedAnimator = positionOuter < _Position_Current ? _NestedAnimators[_NestedAnimators.length - i - 1] : animator;
-                nestedAnimator.$GoToPosition(positionOuter, force);
-            });
-
-            var positionOld = _Position_Current;
-            var positionNew = positionOuter;
-
-            _Position_Current = trimedPositionOuter;
-            _Hooked = true;
-
-            _ThisAnimator.$OnPositionChange(positionOld, positionNew);
         }
     }
 
-    function Join(animator, combineMode) {
+    function Join(animator, combineMode, noExpand) {
         ///	<summary>
         ///		Combine another animator as nested animator
         ///	</summary>
@@ -2547,7 +2468,10 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
         if (combineMode)
             animator.$Locate(_Position_OuterEnd, 1);
 
-        _Position_OuterEnd = Math.max(_Position_OuterEnd, animator.$GetPosition_OuterEnd());
+        if (!noExpand) {
+            _Position_OuterBegin = Math.min(_Position_OuterBegin, animator.$GetPosition_OuterBegin() + _Shift);
+            _Position_OuterEnd = Math.max(_Position_OuterEnd, animator.$GetPosition_OuterEnd() + _Shift);
+        }
         _NestedAnimators.push(animator);
     }
 
@@ -2559,7 +2483,7 @@ $JssorAnimator$ = function (delay, duration, options, elmt, fromStyles, toStyles
     if ($Jssor$.$IsBrowserSafari() && $Jssor$.$BrowserVersion() < 7) {
         RequestAnimationFrame = null;
 
-        $JssorDebug$.$Log("Custom animation frame for safari before 7.");
+        //$JssorDebug$.$Log("Custom animation frame for safari before 7.");
     }
 
     RequestAnimationFrame = RequestAnimationFrame || function (callback) {
@@ -2783,7 +2707,7 @@ function $JssorPlayerClass$() {
         var _PlayerInstantces = [];
 
         function OnPlayerInstanceDataAvailable(event) {
-            var srcElement = $Jssor$.$EventSrc(event);
+            var srcElement = $Jssor$.$EvtSrc(event);
             _PlayerInstance = srcElement.pInstance;
 
             $Jssor$.$RemoveEvent(srcElement, "dataavailable", OnPlayerInstanceDataAvailable);
