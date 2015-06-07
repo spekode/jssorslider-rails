@@ -1,8 +1,5 @@
-require "jssorslider-rails/version"
+require 'jssorslider-rails/version'
+require 'jssorslider-rails/engine'
 
-module JssorsliderRails  
-  module Rails
-    class Engine < ::Rails::Engine
-    end
-  end
+module JssorsliderRails
 end
