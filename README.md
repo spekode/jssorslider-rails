@@ -1,6 +1,6 @@
 # JssorsliderRails
 
-A ruby gem to add the Jssor Slider to your Rails asset pipeline.
+A ruby gem to add the [Jssor Slider](https://github.com/jssor/slider) to your Rails asset pipeline.
 
 ## Usage
 
