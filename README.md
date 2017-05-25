@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 Require the Jssor files you want in application.js
 
-    //= require jssor.slider.mini
+    //= require jssor.slider.min
 
 See http://www.jssor.com/development for how to setup the slider itself.
 
