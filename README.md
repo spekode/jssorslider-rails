@@ -1,6 +1,6 @@
 # JssorsliderRails
 
-A ruby gem to add the Jssor Slider to your Rails asset pipeline.
+A ruby gem to add the [Jssor Slider](https://github.com/jssor/slider) to your Rails asset pipeline.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 Require the Jssor files you want in application.js
 
-    //= require jssor.slider.mini
+    //= require jssor.slider.min
 
 See http://www.jssor.com/development for how to setup the slider itself.
 
